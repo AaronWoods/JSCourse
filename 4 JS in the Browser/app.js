@@ -42,10 +42,13 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
     diceDOM.src = 'dice-' + dice + '.png';
 
     if(dice !== 1){
-        currentScoreDOM.textContent = parseInt(currentScoreDOM.textContent) + dice;
+        roundScore += dice;
+        currentScoreDOM.textContent = roundScore;
     }
     else{
-        currentScoreDOM.textContent = 0;
+        roundScore = 0;
+        currentScoreDOM.textContent = roundScore;
+        document.querySelector('.dice').style.display = 'none';
         switchPlayers();
     }
 });
@@ -54,7 +57,9 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     var playerScoreDOM = document.querySelector('#score-' + activePlayer);
     var currentScoreDOM = document.querySelector('#current-' + activePlayer);
     
-    playerScoreDOM.textContent = parseInt(currentScoreDOM.textContent) + parseInt(playerScoreDOM.textContent);
+    scores[activePlayer] += roundScore;
+    playerScoreDOM.textContent = scores[activePlayer];
+    roundScore = 0;
     currentScoreDOM.textContent = 0;
     if(parseInt(playerScoreDOM.textContent) > 99){
         document.querySelector('.btn-roll').style.display = 'none';
@@ -63,7 +68,6 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 });
 
 document.querySelector('.btn-new').addEventListener('click', function(){
-    console.log("hit");
     document.querySelector('.dice').style.display = 'none';
     var playerScoreDOM = document.querySelector('#score-0');
     var currentScoreDOM = document.querySelector('#current-0');
@@ -74,17 +78,17 @@ document.querySelector('.btn-new').addEventListener('click', function(){
     playerScoreDOM2.textContent = 0;
     currentScoreDOM.textContent = 0;
     currentScoreDOM2.textContent = 0;
-    playerActive.className = 'active';
+    playerActive.className = 'player-0-panel active';
     activePlayer = 0;
 
 });
 
 function switchPlayers(){
     var playerActive = document.querySelector('.player-'+ activePlayer +'-panel');
-    playerActive.className = playerActive.className.replace("active", "");
+    playerActive.classList.remove("active");
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
     var playerActive2 = document.querySelector('.player-'+ activePlayer +'-panel');
-    playerActive2.className = playerActive2.className += ' active';
+   playerActive2.classList.add('active');
 }
 
 
