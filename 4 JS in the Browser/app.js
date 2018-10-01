@@ -25,7 +25,7 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 - Add another dice ( if either lands on 1, current score lost - css and html changes needed here)
 */
 
-var scores, roundScore, activePlayer;
+var scores, roundScore, activePlayer, winningScore;
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
     var currentScoreDOM = document.querySelector('#current-'+ activePlayer);
@@ -55,8 +55,6 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
     else{
         roundScore = 0;
         currentScoreDOM.textContent = roundScore;
-        document.querySelector('#dice1').style.display = 'none';
-        document.querySelector('#dice2').style.display = 'none';
         switchPlayers();
     }
     
@@ -72,8 +70,10 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     playerScoreDOM.textContent = scores[activePlayer];
     currentScoreDOM.textContent = 0;
 
-    if(scores[activePlayer] > 99){
+    if(scores[activePlayer] >= winningScore){
         document.querySelector('.btn-roll').style.display = 'none';
+        document.querySelector('.btn-hold').style.display = 'none';
+        document.querySelector('#name-' + activePlayer).textContent = 'WINNER!';
     }else{
         prevRoll = 0;
         switchPlayers();
@@ -83,6 +83,18 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 
 document.querySelector('.btn-new').addEventListener('click', init);
 
+document.querySelector('.btn-change-win').addEventListener('click', function(){
+    var val = document.querySelector('#winning-condition').value;
+    val = parseInt(val);
+    if(Number.isInteger(val)){
+        winningScore = val;
+        console.log("Score changed to:" + val);
+    }
+    else console.log("invalid val:"+ val);
+    
+    
+})
+
 function init(){
     document.querySelector('#dice1').style.display = 'none';
     document.querySelector('#dice2').style.display = 'none';
@@ -90,14 +102,18 @@ function init(){
     document.querySelector('#current-0').textContent = 0;
     document.querySelector('#score-1').textContent = 0;
     document.querySelector('#current-1').textContent = 0;
+    document.querySelector('#name-0').textContent = 'Player 1';
+    document.querySelector('#name-1').textContent = 'Player 2';
     document.querySelector('.player-0-panel').className = 'player-0-panel active';
     document.querySelector('.player-1-panel').className = 'player-1-panel';
     document.querySelector('.btn-roll').style.display = 'block';
+    document.querySelector('.btn-hold').style.display = 'block';
     activePlayer = 0;
 
     scores = [0,0];
     roundScore = 0;
     activePlayer = 0;
+    winningScore = 100;
 
 }
 
